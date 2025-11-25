@@ -1,109 +1,148 @@
-#correção do metodo checar_agendamento
-from collections import deque
-from time import sleep
+#Metodo de remover adicionado
+from collections import deque # Importa a classe deque para gerenciar a fila de agendamentos
+from time import sleep # Importa a função sleep para pausar a execução do programa
 
 class Agendamento:
-    fila = deque()
-    proximo_id = 1
+    fila = deque() # Fila estática (da classe) para armazenar todos os agendamentos
+    proximo_id = 1 # ID estático (da classe) para atribuir um ID único a cada novo agendamento
 
-    def __init__(self, nome, cpf, c_sus, c_residencia):
-        self.cpf = cpf
-        self.agendamento_id = Agendamento.proximo_id
-        self.nome = nome
-        self.c_sus = c_sus
-        self.c_residencia = c_residencia
-        Agendamento.proximo_id += 1
+    def __init__(self, nome, cpf, c_sus, c_residencia): # Método construtor para inicializar um novo objeto Agendamento
+        self.cpf = cpf # Atribui o CPF ao agendamento
+        self.agendamento_id = Agendamento.proximo_id # Atribui o próximo ID disponível ao agendamento
+        self.nome = nome # Atribui o nome ao agendamento
+        self.c_sus = c_sus # Atribui o Cartão SUS ao agendamento
+        self.c_residencia = c_residencia # Atribui o Cartão de Residência ao agendamento
+        Agendamento.proximo_id += 1 # Incrementa o contador de ID para o próximo agendamento
 
-    def __str__(self):
+    def __str__(self): # Método para retornar uma representação em string do objeto Agendamento
         return f"Agendamento {self.agendamento_id} (Nome: {self.nome}, CPF: {self.cpf}, C_SUS: {self.c_sus}, C_Residencia: {self.c_residencia})"
 
-    @classmethod
-    def add(cls, nome, cpf, c_sus, c_residencia):
-        novo_agendamento = cls(nome, cpf, c_sus, c_residencia)
-        cls.fila.append(novo_agendamento)
-        sleep(1.5)
-        print(f'{novo_agendamento.nome} foi agendado com sucesso!')
-        sleep(1.5)
+    @classmethod # Decorador para definir um método de classe
+    def add(cls, nome, cpf, c_sus, c_residencia): # Método de classe para adicionar um novo agendamento à fila
+        novo_agendamento = cls(nome, cpf, c_sus, c_residencia) # Cria uma nova instância de Agendamento
+        cls.fila.append(novo_agendamento) # Adiciona o novo agendamento ao final da fila
+        sleep(1.5) # Pausa por 1.5 segundos
+        print(f'{novo_agendamento.nome} foi agendado com sucesso!') # Informa que o agendamento foi adicionado
+        sleep(1.5) # Pausa por 1.5 segundos
 
-    @classmethod
-    def mostrar_fila(cls):
-        if cls.fila:
-            for fila_agendamento in cls.fila:
-                print(fila_agendamento)
-        else:
-            print('Nenhuma fila de agendamento')
+    @classmethod # Decorador para definir um método de classe
+    def mostrar_fila(cls): # Método de classe para exibir todos os agendamentos na fila
+        if cls.fila: # Verifica se a fila não está vazia
+            for fila_agendamento in cls.fila: # Itera sobre cada agendamento na fila
+                print(fila_agendamento) # Imprime os detalhes do agendamento
+        else: # Se a fila estiver vazia
+            print('Nenhuma fila de agendamento') # Informa que não há agendamentos
 
+    @classmethod # Decorador para definir um método de classe
+    def checar_agendamento(cls, numero_agendamento): # Método de classe para verificar um agendamento pelo ID
+        for fila_agendamento in cls.fila: # Itera sobre cada agendamento na fila
+          if fila_agendamento.agendamento_id == numero_agendamento: # Se o ID do agendamento corresponder
+              print(fila_agendamento) # Imprime os detalhes do agendamento encontrado
+              print(f"{fila_agendamento.nome} está agendado") # Informa que o agendamento está marcado
+              print('='*30) # Imprime uma linha separadora
+              sleep(1.5) # Pausa por 1.5 segundos
+              return # Sai da função após encontrar o agendamento
+        # Se chegarmos aqui, o ID não foi encontrado após verificar todos os agendamentos
+        print(f'Não foi encontrado nenhum agendamento com o ID indicado.') # Informa que o ID não foi encontrado
+        print('='*30) # Imprime uma linha separadora
+        sleep(1.5) # Pausa por 1.5 segundos
 
-    @classmethod
-    def checar_agendamento(cls, numero_agendamento):
-        for fila_agendamento in cls.fila: #Mudei a ordem ele verifica se a ID esta certo primeiro e depois se está errada
-          if fila_agendamento.agendamento_id == numero_agendamento:
-              print(fila_agendamento)
-              print(f"{fila_agendamento.nome} está agendado")
-              print('='*30)
-              sleep(1.5)
-              return
-        if cls.fila:
-            for fila_agendamento in cls.fila:
-                if not fila_agendamento.agendamento_id == numero_agendamento:
-                    print(f'Não foi encontrado nenhum agendamento com o ID indicado.')
-                    print('='*30)
-                    sleep(1.5)
-                    return
-        # else: Coloquei essa linha de codigo mais abaixo
-        #   if not cls.fila:
-        #     print(f'Não há agendamentos marcados.')
-        #     print('='*30)
-        #     sleep(1.5)
-        #     return
+    @classmethod # Decorador para definir um método de classe
+    def remover(cls, numero_agendamento): # Método de classe para remover um agendamento pelo ID
+        if not cls.fila: # Verifica se a fila está vazia
+            print('Não há agendamentos para remover.') # Informa que não há agendamentos
+            print('='*30) # Imprime uma linha separadora
+            sleep(1.5) # Pausa por 1.5 segundos
+            return # Sai da função
 
-#Pra ficar algumas pessoas aleatorias adicionadas no sistema
-p1 = Agendamento.add("Fernando da Silva", 1111111, 1111111, 1111111)
-p2 = Agendamento.add("Alicia Costa", 2222222, 2222222, 2222222)
-p3 = Agendamento.add("Felicia de Melo", 33333333, 33333333, 33333333)
+        found = False # Flag para indicar se o agendamento foi encontrado
+        nova_fila = deque() # Cria uma nova fila vazia
+        agendamento_removido = None # Variável para armazenar o agendamento removido
 
-while True:
-    print("--------- Menu Principal ---------")
-    print("1. Fazer agendamento")
-    print("2. Checar agendamento")
-    print("3. Mostrar fila de clientes")
-    print("0. Sair do sistema")
+        for agendamento in cls.fila: # Itera sobre os agendamentos na fila atual
+            if agendamento.agendamento_id == numero_agendamento and not found: # Se o ID corresponder e ainda não foi encontrado
+                agendamento_removido = agendamento # Armazena o agendamento a ser removido
+                found = True # Marca como encontrado para não remover outros com o mesmo ID
+            else: # Se não for o agendamento a ser removido ou já foi encontrado
+                nova_fila.append(agendamento) # Adiciona o agendamento à nova fila
 
-    opcao = int(input("Escolha a opção: ").strip())
+        if found: # Se o agendamento foi encontrado e removido
+            cls.fila = nova_fila # Substitui a fila antiga pela nova (sem o agendamento removido)
+            print(f'Agendamento {agendamento_removido.agendamento_id} de {agendamento_removido.nome} removido com sucesso!') # Confirma a remoção
+            print('='*30) # Imprime uma linha separadora
+            sleep(1.5) # Pausa por 1.5 segundos
+        else: # Se o agendamento não foi encontrado
+            print(f'Não foi encontrado nenhum agendamento com o ID {numero_agendamento} para remover.') # Informa que não foi encontrado
+            print('='*30) # Imprime uma linha separadora
+            sleep(1.5) # Pausa por 1.5 segundos
 
-    if opcao == 1:
-        print('-'*30)
-        print(f'Area de agendamento. Preencha os dados a seguir.')
-        nomeInput = str(input("Nome: "))
-        cpfInput = int(input("CPF (apenas números): "))
-        c_susInput = int(input("Número do cartão do SUS (apenas números): "))
-        c_residenciaInput = int(input("Número do cartão de residencia (apenas números): "))
-        print('-'*30)
-        Agendamento.add(nomeInput, cpfInput, c_susInput, c_residenciaInput)
+# Pra ficar algumas pessoas aleatórias adicionadas no sistema (inicialização)
+p1 = Agendamento.add("Fernando da Silva", 1111111, 1111111, 1111111) # Adiciona um agendamento inicial
+p2 = Agendamento.add("Alicia Costa", 2222222, 2222222, 2222222) # Adiciona outro agendamento inicial
+p3 = Agendamento.add("Felicia de Melo", 33333333, 33333333, 33333333) # Adiciona mais um agendamento inicial
 
-    elif opcao == 2:
-        print('='*30)
-        sleep(1)
-        if not Agendamento.fila: #Aqui está o codigo, agora se não tiver ninguem ele ja vai dizer direto
-          print(f'Não há agendamentos marcados.')
-          print('='*30)
-          sleep(1.5)
-        else:
-          print(f'Qual o ID de agendamento que deseja buscar?')
-          numero_agendamento = int(input("ID do agendamento: "))
-          print('='*30)
-          sleep(1.5)
-          Agendamento.checar_agendamento(numero_agendamento)
+while True: # Loop principal do menu do programa
+    print("--------- Menu Principal ---------") # Título do menu
+    print("1. Fazer agendamento") # Opção para fazer um novo agendamento
+    print("2. Checar agendamento") # Opção para checar um agendamento existente
+    print("3. Mostrar fila de clientes") # Opção para mostrar a fila completa
+    print("4. Remover agendamento") # Nova opção para remover um agendamento
+    print("0. Sair do sistema") # Opção para sair do programa
 
-    elif opcao == 3:
-        print('-'*30)
-        sleep(1.5)
-        Agendamento.mostrar_fila()
-        sleep(1.5)
+    try: # Inicia um bloco para tratamento de erros
+        opcao = int(input("Escolha a opção: ").strip()) # Solicita a opção ao usuário e converte para inteiro
+    except ValueError: # Captura o erro se o usuário não digitar um número
+        print("Opção inválida. Por favor, digite um número.") # Informa sobre a opção inválida
+        sleep(1) # Pausa por 1 segundo
+        continue # Continua para a próxima iteração do loop (mostra o menu novamente)
 
-    elif opcao == 0:
-        print("Encerrando o sistema. Até logo")
-        break
+    if opcao == 1: # Se a opção for 1 (Fazer agendamento)
+        print('-'*30) # Imprime uma linha separadora
+        print(f'Area de agendamento. Preencha os dados a seguir.') # Informa para preencher os dados
+        nomeInput = str(input("Nome: ")) # Pede o nome
+        cpfInput = int(input("CPF (apenas números): ")) # Pede o CPF
+        c_susInput = int(input("Número do cartão do SUS (apenas números): ")) # Pede o Cartão SUS
+        c_residenciaInput = int(input("Número do cartão de residencia (apenas números): ")) # Pede o Cartão de Residência
+        print('-'*30) # Imprime uma linha separadora
+        Agendamento.add(nomeInput, cpfInput, c_susInput, c_residenciaInput) # Chama o método para adicionar o agendamento
 
-    else:
-        print("Opção invalida tente novamente.")
+    elif opcao == 2: # Se a opção for 2 (Checar agendamento)
+        print('='*30) # Imprime uma linha separadora
+        sleep(1) # Pausa por 1 segundo
+        if not Agendamento.fila: # Verifica se a fila está vazia
+          print(f'Não há agendamentos marcados.') # Informa que não há agendamentos
+          print('='*30) # Imprime uma linha separadora
+          sleep(1.5) # Pausa por 1.5 segundos
+        else: # Se a fila não estiver vazia
+          print(f'Qual o ID de agendamento que deseja buscar?') # Pede o ID do agendamento
+          numero_agendamento = int(input("ID do agendamento: ")) # Lê o ID e converte para inteiro
+          print('='*30) # Imprime uma linha separadora
+          sleep(1.5) # Pausa por 1.5 segundos
+          Agendamento.checar_agendamento(numero_agendamento) # Chama o método para checar o agendamento
+
+    elif opcao == 3: # Se a opção for 3 (Mostrar fila de clientes)
+        print('-'*30) # Imprime uma linha separadora
+        sleep(1.5) # Pausa por 1.5 segundos
+        Agendamento.mostrar_fila() # Chama o método para mostrar a fila
+        sleep(1.5) # Pausa por 1.5 segundos
+
+    elif opcao == 4: # Se a opção for 4 (Remover agendamento)
+        print('='*30) # Imprime uma linha separadora
+        sleep(1) # Pausa por 1 segundo
+        if not Agendamento.fila: # Verifica se a fila está vazia
+            print(f'Não há agendamentos para remover.') # Informa que não há agendamentos para remover
+            print('='*30) # Imprime uma linha separadora
+            sleep(1.5) # Pausa por 1.5 segundos
+        else: # Se a fila não estiver vazia
+            print(f'Qual o ID do agendamento que deseja remover?') # Pede o ID do agendamento a remover
+            numero_agendamento = int(input("ID do agendamento a remover: ")) # Lê o ID e converte para inteiro
+            print('='*30) # Imprime uma linha separadora
+            sleep(1.5) # Pausa por 1.5 segundos
+            Agendamento.remover(numero_agendamento) # Chama o método para remover o agendamento
+
+    elif opcao == 0: # Se a opção for 0 (Sair do sistema)
+        print("Encerrando o sistema. Até logo") # Mensagem de encerramento
+        break # Sai do loop principal, encerrando o programa
+
+    else: # Se a opção for inválida (fora das opções 0-4)
+        print("Opção inválida, tente novamente.") # Informa sobre a opção inválida
