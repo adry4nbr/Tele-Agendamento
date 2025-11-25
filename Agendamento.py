@@ -1,3 +1,4 @@
+#correção do metodo checar_agendamento
 from collections import deque
 from time import sleep
 
@@ -35,27 +36,31 @@ class Agendamento:
 
     @classmethod
     def checar_agendamento(cls, numero_agendamento):
-        if not cls.fila:
-            print(f'Não há agendamentos marcados.')
-            print('='*30)
-            sleep(1.5)
-            return
-        elif cls.fila:
+        for fila_agendamento in cls.fila: #Mudei a ordem ele verifica se a ID esta certo primeiro e depois se está errada
+          if fila_agendamento.agendamento_id == numero_agendamento:
+              print(fila_agendamento)
+              print(f"{fila_agendamento.nome} está agendado")
+              print('='*30)
+              sleep(1.5)
+              return
+        if cls.fila:
             for fila_agendamento in cls.fila:
                 if not fila_agendamento.agendamento_id == numero_agendamento:
                     print(f'Não foi encontrado nenhum agendamento com o ID indicado.')
                     print('='*30)
                     sleep(1.5)
                     return
-        else:
-            for fila_agendamento in cls.fila:
-                if fila_agendamento.agendamento_id == numero_agendamento:
-                    print(fila_agendamento)
-                    print('='*30)
-                    sleep(1.5)
-                    return
+        # else: Coloquei essa linha de codigo mais abaixo
+        #   if not cls.fila:
+        #     print(f'Não há agendamentos marcados.')
+        #     print('='*30)
+        #     sleep(1.5)
+        #     return
 
-#p1 = Agendamento.add("Fernando da Silva", 1111111, 1111111, 1111111)
+#Pra ficar algumas pessoas aleatorias adicionadas no sistema
+p1 = Agendamento.add("Fernando da Silva", 1111111, 1111111, 1111111)
+p2 = Agendamento.add("Alicia Costa", 2222222, 2222222, 2222222)
+p3 = Agendamento.add("Felicia de Melo", 33333333, 33333333, 33333333)
 
 while True:
     print("--------- Menu Principal ---------")
@@ -79,11 +84,16 @@ while True:
     elif opcao == 2:
         print('='*30)
         sleep(1)
-        print(f'Qual o ID de agendamento que deseja buscar?')
-        numero_agendamento = int(input("ID do agendamento: "))
-        print('='*30)
-        sleep(1.5)
-        Agendamento.checar_agendamento(numero_agendamento)
+        if not Agendamento.fila: #Aqui está o codigo, agora se não tiver ninguem ele ja vai dizer direto
+          print(f'Não há agendamentos marcados.')
+          print('='*30)
+          sleep(1.5)
+        else:
+          print(f'Qual o ID de agendamento que deseja buscar?')
+          numero_agendamento = int(input("ID do agendamento: "))
+          print('='*30)
+          sleep(1.5)
+          Agendamento.checar_agendamento(numero_agendamento)
 
     elif opcao == 3:
         print('-'*30)
