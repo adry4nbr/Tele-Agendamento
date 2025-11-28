@@ -1,4 +1,4 @@
-# Correção de bugs
+# Mudança == Troca na busca de agendamento: ID por CPF
 from collections import deque # Importa a classe deque para gerenciar a fila de agendamentos
 from time import sleep # Importa a função sleep para pausar a execução do programa
 import random # Importa a biblioteca random para gerar números aleatórios
@@ -29,26 +29,27 @@ class Agendamento:
     sleep(1.5) # Pausa por 1.5 segundos
     print(f'{novo_agendamento.nome} foi agendado com sucesso!') # Informa que o agendamento foi adicionado
     sleep(1.5) # Pausa por 1.5 segundos
-    return # Sai da função após adicionar
+    return
 
-  @classmethod # Decorador para definir um método de classe
+  @classmethod
   def checar_agendamento(cls, numero_agendamento): # Método de classe para verificar um agendamento pelo ID (READ específico)
     for fila_agendamento in cls.fila: # Itera sobre cada agendamento na fila
-      if fila_agendamento.agendamento_id == numero_agendamento: # Se o ID do agendamento corresponder
+      if fila_agendamento.cpf == numero_agendamento: # Se o ID do agendamento corresponder
         print(fila_agendamento) # Imprime os detalhes do agendamento encontrado
-        print(f"{fila_agendamento.nome} está agendado") # Informa que o agendamento está marcado
-        print('='*30) # Imprime uma linha separadora
-        sleep(1.5) # Pausa por 1.5 segundos
-        return # Sai da função após encontrar o agendamento
-    # Se chegarmos aqui, o ID não foi encontrado após verificar todos os agendamentos
-    print(f'Não foi encontrado nenhum agendamento com o ID indicado.') # Informa que o ID não foi encontrado
-    print('='*30) # Imprime uma linha separadora
-    sleep(1.5) # Pausa por 1.5 segundos
+        print(f"{fila_agendamento.nome} está agendado")
+        print('='*30)
+        sleep(1.5)
+        return
 
-  @classmethod # Decorador para definir um método de classe
+    # Se chegarmos aqui, o ID não foi encontrado após verificar todos os agendamentos
+    print(f'Não foi encontrado nenhum agendamento com o ID indicado.')
+    print('='*30)
+    sleep(1.5)
+
+  @classmethod
   def atualizar(cls, numero_agendamento, novo_nome, novo_cpf, novo_c_sus, novo_c_residencia, novo_telefone, novo_data_agendamento, novo_tipo_agendamento): # Método para atualizar um agendamento (UPDATE)
     for agendamento in cls.fila: # Itera sobre cada agendamento na fila
-      if agendamento.agendamento_id == numero_agendamento: # Se o ID do agendamento corresponder
+      if agendamento.cpf == numero_agendamento: # Se o ID do agendamento corresponder
 
         nome_antigo = agendamento.nome # Armazena o nome antigo para exibição
 
@@ -61,28 +62,28 @@ class Agendamento:
         agendamento.data_agendamento = novo_data_agendamento # Atualiza a data do agendamento
         agendamento.tipo_agendamento = novo_tipo_agendamento # Atualiza o tipo de agendamento
 
-        sleep(1.5) # Pausa por 1.5 segundos
-        print('='*30) # Imprime uma linha separadora
-        print(f" Agendamento {numero_agendamento} de {nome_antigo} atualizado para:") # Confirma a atualização
+        sleep(1.5)
+        print('='*30)
+        print(f" Agendamento {numero_agendamento} de {nome_antigo} atualizado para:")
         print(agendamento) # Imprime os detalhes do agendamento atualizado
-        print('='*30) # Imprime uma linha separadora
-        sleep(1.5) # Pausa por 1.5 segundos
-        return # Sai da função após a atualização
+        print('='*30)
+        sleep(1.5)
+        return
 
     # Se chegar aqui, o ID não foi encontrado
-    sleep(1.5) # Pausa por 1.5 segundos
-    print('='*30) # Imprime uma linha separadora
-    print(f'Não foi encontrado nenhum agendamento com o ID {numero_agendamento} para atualizar.') # Informa que o agendamento não foi encontrado para atualização
-    print('='*30) # Imprime uma linha separadora
-    sleep(1.5) # Pausa por 1.5 segundos
+    sleep(1.5)
+    print('='*30)
+    print(f'Não foi encontrado nenhum agendamento com o ID {numero_agendamento} para atualizar.')
+    print('='*30)
+    sleep(1.5)
 
   @classmethod # Decorador para definir um método de classe
   def remover(cls, numero_agendamento): # Método de classe para remover um agendamento pelo ID (DELETE)
     if not cls.fila: # Verifica se a fila está vazia
-      print('Não há agendamentos para remover.') # Informa que não há agendamentos
-      print('='*30) # Imprime uma linha separadora
-      sleep(1.5) # Pausa por 1.5 segundos
-      return # Sai da função
+      print('Não há agendamentos para remover.')
+      print('='*30)
+      sleep(1.5)
+      return
 
     found = False # Flag para indicar se o agendamento foi encontrado
     nova_fila = deque() # Cria uma nova fila vazia
@@ -97,217 +98,221 @@ class Agendamento:
 
     if found: # Se o agendamento foi encontrado e removido
       cls.fila = nova_fila # Substitui a fila antiga pela nova (sem o agendamento removido)
-      print(f'Agendamento {agendamento_removido.agendamento_id} de {agendamento_removido.nome} removido com sucesso!') # Confirma a remoção
-      print('='*30) # Imprime uma linha separadora
-      sleep(1.5) # Pausa por 1.5 segundos
+      print(f'Agendamento {agendamento_removido.agendamento_id} de {agendamento_removido.nome} removido com sucesso!')
+      print('='*30)
+      sleep(1.5)
     else: # Se o agendamento não foi encontrado
-      print(f'Não foi encontrado nenhum agendamento com o ID {numero_agendamento} para remover.') # Informa que não foi encontrado
-      print('='*30) # Imprime uma linha separadora
-      sleep(1.5) # Pausa por 1.5 segundos
+      print(f'Não foi encontrado nenhum agendamento com o ID {numero_agendamento} para remover.')
+      print('='*30)
+      sleep(1.5)
 
-# Pra ficar algumas pessoas aleatórias adicionadas no sistema (inicialização)
-p1 = Agendamento.add("Fernando da Silva", 1111111, 1111111, 1111111, 1111111, "31/12/2026", "Cardiologista") # Adiciona um agendamento inicial
-p2 = Agendamento.add("Alicia Costa", 2222222, 2222222, 2222222, 2222222, "30/09/26", "Neurologista") # Adiciona outro agendamento inicial
-p3 = Agendamento.add("Felicia de Melo", 33333333, 33333333, 33333333, 33333333, "10/02/27", "Pediatra") # Adiciona mais um agendamento inicial
+# Pra ficar algumas pessoas aleatórias adicionadas no sistema (inicialização) ===============================
+p1 = Agendamento.add("Fernando da Silva", 1, 1111111, 1111111, 1111111, "31/12/2026", "Cardiologista")
+p2 = Agendamento.add("Alicia Costa", 2, 2222222, 2222222, 2222222, "30/09/26", "Neurologista")
+p3 = Agendamento.add("Felicia de Melo", 3, 33333333, 33333333, 33333333, "10/02/27", "Pediatra")
+#=============================================================================================================
 
 while True: # Loop principal do menu do programa
-  print("--------- Menu Principal ---------") # Título do menu
-  print("1. Fazer agendamento") # Opção para fazer um novo agendamento (CREATE)
-  print("2. Checar agendamento") # Opção para checar um agendamento existente (READ Específico)
-  print("3. Remover agendamento") # Opção para remover um agendamento (DELETE)
-  print("4. Atualizar agendamento") # Opção para atualizar um agendamento (UPDATE) <<< OPÇÃO ADICIONADA
-  print("0. Sair do sistema") # Opção para sair do programa
+  print("--------- Menu Principal ---------")
+  print("1. Fazer agendamento")
+  print("2. Checar agendamento")
+  print("3. Remover agendamento")
+  print("4. Atualizar agendamento")
+  print("0. Sair do sistema")
 
   try: # Inicia um bloco para tratamento de erros
-    opcao = int(input("Escolha a opção: ").strip()) # Solicita a opção ao usuário e converte para inteiro
+    opcao = int(input("Escolha a opção: ").strip())
   except ValueError: # Captura o erro se o usuário não digitar um número
-    print("Opção inválida. Por favor, digite um número.") # Informa sobre a opção inválida
-    sleep(1) # Pausa por 1 segundo
-    continue # Continua para a próxima iteração do loop (mostra o menu novamente)
+    print("Opção inválida. Por favor, digite um número.")
+    sleep(1)
+    continue
 
-  if opcao == 1: # Se a opção for 1 (Fazer agendamento)
-    print('-'*30) # Imprime uma linha separadora
-    print(f'Area de agendamento. Preencha os dados a seguir.') # Informa para preencher os dados
+  if opcao == 1:
+    print('-'*30)
+    print(f'Area de agendamento. Preencha os dados a seguir.')
     try:
-      nomeInput = str(input("Nome: ")) # Pede o nome
-      cpfInput = int(input("CPF (apenas números): ")) # Pede o CPF
-      c_susInput = int(input("Número do cartão do SUS (apenas números): ")) # Pede o Cartão SUS
-      c_residenciaInput = int(input("Número da residência (apenas números): ")) # Pede o Cartão de Residência
-      telefoneInput = int(input("Número de telefone (apenas números): ")) # Pede o número de telefone
+      nomeInput = str(input("Nome: "))
+      cpfInput = int(input("CPF (apenas números): "))
+      c_susInput = int(input("Número do cartão do SUS (apenas números): "))
+      c_residenciaInput = int(input("Número da residência (apenas números): "))
+      telefoneInput = int(input("Número de telefone (apenas números): "))
       dia_random = random.randint(1 ,28) # Gera um dia aleatório para a data do agendamento
       mes_random = random.randint(1 ,12) # Gera um mês aleatório para a data do agendamento
       ano_random = random.randint(2025, 2030) # Gera um ano aleatório para a data do agendamento
       data_agendamento = (f"{dia_random}/{mes_random}/{ano_random}") # Formata a data de agendamento
       while True:
-        print("--------- Tipos de Agendamentos ---------") # Título para os tipos de agendamento
-        print("1. Cardiologista") # Opção de Cardiologista
-        print("2. Ortopedista") # Opção de Ortopedista
-        print("3. Pediatra") # Opção de Pediatra
-        print("4. Oftalmologista") # Opção de Oftalmologista
-        print("5. Neurologista") # Opção de Neurologista
-        print("6. Clínico Geral") # Opção de Clínico Geral
+        print("--------- Tipos de Agendamentos ---------")
+        print("1. Cardiologista")
+        print("2. Ortopedista")
+        print("3. Pediatra")
+        print("4. Oftalmologista")
+        print("5. Neurologista")
+        print("6. Clínico Geral")
 
         try:
-          tipo = int(input("Escolha qual o tipo de agendamento.").strip()) # Solicita o tipo de agendamento e converte para inteiro
+          tipo = int(input("Escolha qual o tipo de agendamento.").strip())
         except ValueError: # Captura o erro se o usuário não digitar um número
-          print("Não temos esse tipo de agendamento. Digite um número.") # Mensagem de erro para entrada inválida
-          sleep(1) # Pausa por 1 segundo
-          continue # Continua para a próxima iteração do loop
+          print("Não temos esse tipo de agendamento. Digite um número.")
+          sleep(1)
+          continue
 
         if tipo == 1:
           tipo = "Cardiologista" # Define o tipo de agendamento como Cardiologista
-          break # Sai do loop de escolha de tipo
+          break
         elif tipo == 2:
           tipo = "Ortopedista" # Define o tipo de agendamento como Ortopedista
-          break # Sai do loop de escolha de tipo
+          break
         elif tipo == 3:
           tipo = "Pediatra" # Define o tipo de agendamento como Pediatra
-          break # Sai do loop de escolha de tipo
+          break
         elif tipo == 4:
           tipo = "Oftalmologista" # Define o tipo de agendamento como Oftalmologista
-          break # Sai do loop de escolha de tipo
+          break
         elif tipo == 5:
           tipo = "Neurologista" # Define o tipo de agendamento como Neurologista
-          break # Sai do loop de escolha de tipo
+          break
         elif tipo == 6:
           tipo = "Clínico Geral" # Define o tipo de agendamento como Clínico Geral
-          break # Sai do loop de escolha de tipo
+          break
         else:
-          print("Tipo inválido, tente novamente.") # Mensagem para tipo inválido se a opção não for de 1 a 6
+          print("Tipo inválido, tente novamente.")
       tipo_agendamentoInput = tipo # Atribui o tipo de agendamento selecionado
-      print('-'*30) # Imprime uma linha separadora
+      print('-'*30)
       Agendamento.add(nomeInput, cpfInput, c_susInput, c_residenciaInput, telefoneInput, data_agendamento, tipo_agendamentoInput) # Chama o método para adicionar o agendamento
     except ValueError:
       print("Entrada inválida para CPF, SUS, Residência ou Telefone. Por favor, digite apenas números.")
       sleep(1.5)
 
   elif opcao == 2: # Se a opção for 2 (Checar agendamento)
-    print('='*30) # Imprime uma linha separadora
-    sleep(1) # Pausa por 1 segundo
+    print('='*30)
+    sleep(1)
     if not Agendamento.fila: # Verifica se a fila está vazia
-      print(f'Não há agendamentos marcados.') # Informa que não há agendamentos
-      print('='*30) # Imprime uma linha separadora
-      sleep(1.5) # Pausa por 1.5 segundos
+      print(f'Não há agendamentos marcados.')
+      print('='*30)
+      sleep(1.5)
     else: # Se a fila não estiver vazia
-      print(f'Qual o ID de agendamento que deseja buscar?') # Pede o ID do agendamento
+      print(f'Para checar um agendamento é preciso o CPF do indivíduo.')
       try: # Adiciona tratamento de erro para a entrada do ID
-        numero_agendamento = int(input("ID do agendamento: ")) # Lê o ID e converte para inteiro
-        print('='*30) # Imprime uma linha separadora
-        sleep(1.5) # Pausa por 1.5 segundos
-        Agendamento.checar_agendamento(numero_agendamento) # Chama o método para checar o agendamento
+        cpf_agendamento = int(input("Digite o CPF: "))
+        print('='*30)
+        sleep(1.5)
+        Agendamento.checar_agendamento(cpf_agendamento) # Chama o método para checar o agendamento
       except ValueError: # Captura o erro se o usuário não digitar um número
-        print("Entrada inválida. O ID do agendamento deve ser um número. Tente novamente.") # Informa sobre a entrada inválida
-        sleep(1.5) # Pausa por 1.5 segundos
+        print("Entrada inválida. O CPF deve ser apenas números. Tente novamente.")
+        sleep(1.5)
 
   elif opcao == 3: # Se a opção for 3 (Remover agendamento)
-    print('='*30) # Imprime uma linha separadora
-    sleep(1) # Pausa por 1 segundo
+    print('='*30)
+    sleep(1)
     if not Agendamento.fila: # Verifica se a fila está vazia
-      print('Não há agendamentos para remover.') # Informa que não há agendamentos para remover
-      print('='*30) # Imprime uma linha separadora
-      sleep(1.5) # Pausa por 1.5 segundos
+      print('Não há agendamentos para remover.')
+      print('='*30)
+      sleep(1.5)
     else: # Se a fila não estiver vazia
-      print(f'Qual o ID do agendamento que deseja remover?') # Pede o ID do agendamento a remover
+      print(f'É necessário informar o CPF do indivíduo que deseja remover o agendamento.')
       try: # Adiciona tratamento de erro para a entrada do ID
-          numero_agendamento = int(input("ID do agendamento a remover: ")) # Lê o ID e converte para inteiro
-          print('='*30) # Imprime uma linha separadora
-          sleep(1.5) # Pausa por 1.5 segundos
-          Agendamento.remover(numero_agendamento) # Chama o método para remover o agendamento
+          cpf_agendamento = int(input("Digite o CPF: "))
+          print('='*30)
+          sleep(1.5)
+          Agendamento.remover(cpf_agendamento) # Chama o método para remover o agendamento
       except ValueError: # Captura o erro se o usuário não digitar um número
-          print("Entrada inválida. O ID do agendamento deve ser um número. Tente novamente.") # Informa sobre a entrada inválida
-          sleep(1.5) # Pausa por 1.5 segundos
+          print("Entrada inválida. O CPF deve ser apenas números. Tente novamente.")
+          sleep(1.5)
 
   elif opcao == 4: # Se a opção for 4 (Atualizar agendamento - UPDATE)
-    print('='*30) # Imprime uma linha separadora
-    sleep(1) # Pausa por 1 segundo
+    print('='*30)
+    sleep(1)
 
     # Verifica se a fila de agendamentos está vazia antes de tentar atualizar
     if not Agendamento.fila: # Se a fila estiver vazia
-      print(f'Não há agendamentos para atualizar.') # Informa que não há agendamentos para atualizar
-      print('='*30) # Imprime uma linha separadora
-      sleep(1.5) # Pausa por 1.5 segundos
+      print(f'Não há agendamentos para atualizar.')
+      print('='*30)
+      sleep(1.5)
     else: # Se houver agendamentos na fila
-      print(f'Qual o ID do agendamento que deseja atualizar?') # Pede o ID do agendamento a ser atualizado
+      print(f'Deve ser informado o CPF do indivíduo que deseja modificar o agendamento.')
 
       try: # Inicia um bloco para tratamento de erros na entrada do usuário
         # Pede ao usuário o ID do agendamento a ser modificado
-        numero_agendamento = int(input("ID do agendamento a atualizar: ")) # Lê o ID e converte para inteiro
-        print('-'*30) # Imprime uma linha separadora
-        
+        cpf_agendamento = int(input("Digite o CPF: "))
+        print('-'*30)
+
         agendamento_encontrado = None # Variável para armazenar o agendamento se ele for encontrado
 
         for agendamento in Agendamento.fila:
-          if agendamento.agendamento_id == numero_agendamento:
+          if agendamento.cpf == cpf_agendamento:
             agendamento_encontrado = agendamento
-            break # Sai do loop for se o agendamento for encontrado
-        
+            break
+
         if agendamento_encontrado: # Se o agendamento foi encontrado
-          print(f'Preencha os **novos dados** para o agendamento {numero_agendamento}.') # Solicita os novos dados
+          print(f'Preencha os **novos dados** para o agendamento {cpf_agendamento}.')
 
           # Coleta dos novos dados que substituirão os antigos
-          novo_nome = str(input("Novo Nome: ")) # Pede o novo nome
-          novo_cpf = int(input("Novo CPF (apenas números): ")) # Pede o novo CPF
-          novo_c_sus = int(input("Novo Número do cartão do SUS (apenas números): ")) # Pede o novo Cartão SUS
-          novo_c_residencia = int(input("Novo Número da residência (apenas números): ")) # Pede o novo Cartão de Residência
-          novo_telefone = int(input("Número de telefone (apenas números): ")) # Pede o novo número de telefone
-          novo_data_agendamento = Agendamento.data_agendamento# Solicita nova data
+          novo_nome = str(input("Novo Nome: "))
+          novo_cpf = int(input("Novo CPF (apenas números): "))
+          novo_c_sus = int(input("Novo Número do cartão do SUS (apenas números): "))
+          novo_c_residencia = int(input("Novo Número da residência (apenas números): "))
+          novo_telefone = int(input("Número de telefone (apenas números): "))
+          dia_random = random.randint(1 ,28) # Gera um dia aleatório para a data do agendamento
+          mes_random = random.randint(1 ,12) # Gera um mês aleatório para a data do agendamento
+          ano_random = random.randint(2025, 2030) # Gera um ano aleatório para a data do agendamento
+          novo_data_agendamento = (f"{dia_random}/{mes_random}/{ano_random}") # Formata a data de agendamento
 
           while True:
-            print("--------- Tipos de Agendamentos ---------") # Título para os tipos de agendamento
-            print("1. Cardiologista") # Opção de Cardiologista
-            print("2. Ortopedista") # Opção de Ortopedista
-            print("3. Pediatra") # Opção de Pediatra
-            print("4. Oftalmologista") # Opção de Oftalmologista
-            print("5. Neurologista") # Opção de Neurologista
-            print("6. Clínico Geral") # Opção de Clínico Geral
+            print("--------- Tipos de Agendamentos ---------")
+            print("1. Cardiologista")
+            print("2. Ortopedista")
+            print("3. Pediatra")
+            print("4. Oftalmologista")
+            print("5. Neurologista")
+            print("6. Clínico Geral")
 
             try:
               tipo = int(input("Escolha qual o tipo de agendamento.").strip()) # Solicita o tipo de agendamento e converte para inteiro
             except ValueError: # Captura o erro se o usuário não digitar um número
-              print("Não temos esse tipo de agendamento. Digite um número.") # Mensagem de erro para entrada inválida
-              sleep(1) # Pausa por 1 segundo
-              continue # Continua para a próxima iteração do loop
+              print("Não temos esse tipo de agendamento. Digite um número.")
+              sleep(1)
+              continue
 
             if tipo == 1:
               novo_tipo = "Cardiologista" # Define o novo tipo de agendamento como Cardiologista
-              break # Sai do loop de escolha de tipo
+              break
             elif tipo == 2:
               novo_tipo = "Ortopedista" # Define o novo tipo de agendamento como Ortopedista
-              break # Sai do loop de escolha de tipo
+              break
             elif tipo == 3:
               novo_tipo = "Pediatra" # Define o novo tipo de agendamento como Pediatra
-              break # Sai do loop de escolha de tipo
+              break
             elif tipo == 4:
               novo_tipo = "Oftalmologista" # Define o novo tipo de agendamento como Oftalmologista
-              break # Sai do loop de escolha de tipo
+              break
             elif tipo == 5:
               novo_tipo = "Neurologista" # Define o novo tipo de agendamento como Neurologista
-              break # Sai do loop de escolha de tipo
+              break
             elif tipo == 6:
               novo_tipo = "Clínico Geral" # Define o novo tipo de agendamento como Clínico Geral
-              break # Sai do loop de escolha de tipo
+              break
             else:
               print("Tipo inválido, tente novamente.") # Mensagem para tipo inválido se a opção não for de 1 a 6
           novo_tipo_agendamento = novo_tipo # Atribui o novo tipo de agendamento selecionado
 
           # Chama o método de classe 'atualizar' para realizar a modificação no objeto
-          Agendamento.atualizar(numero_agendamento, novo_nome, novo_cpf, novo_c_sus, novo_c_residencia, novo_telefone, novo_data_agendamento, novo_tipo_agendamento)
+          Agendamento.atualizar(cpf_agendamento, novo_nome, novo_cpf, novo_c_sus, novo_c_residencia, novo_telefone, novo_data_agendamento, novo_tipo_agendamento)
         else: # Se o agendamento não foi encontrado após o loop
-          sleep(1.5) # Pausa por 1.5 segundos
-          print('='*30) # Imprime uma linha separadora
-          print(f'Não foi encontrado nenhum agendamento com o ID {numero_agendamento} para atualizar.') # Informa que o agendamento não foi encontrado para atualização
-          print('='*30) # Imprime uma linha separadora
-          sleep(1.5) # Pausa por 1.5 segundos
+          sleep(1.5)
+          print('='*30)
+          print(f'Não foi encontrado nenhum agendamento com esse CPF {cpf_agendamento} para atualizar.')
+          print('='*30)
+          sleep(1.5)
 
       except ValueError: # Captura o erro se o usuário digitar texto onde é esperado um número (ID, CPF, SUS, Residência)
         # Tratamento de erro caso o usuário digite texto onde é esperado um número (ID, CPF, SUS, Residência)
-        print("Entrada inválida. O ID, CPF, SUS, Residência, Telefone ou Data devem ser válidos. Tente novamente.") # Informa sobre a entrada inválida
+        print("Entrada inválida. O ID, CPF, SUS, Residência ou Telefone2 devem ser válidos. Tente novamente.") # Informa sobre a entrada inválida
         sleep(1.5)
 
 
-  elif opcao == 0: # Se a opção for 0 (Sair do sistema)
-    print("Encerrando o sistema. Até logo") # Mensagem de encerramento
-    break # Sai do loop principal, encerrando o programa
+  elif opcao == 0:
+    print("Encerrando o sistema. Até logo")
+    break
 
   else: # Se a opção for inválida (fora das opções 0-5)
-    print("Opção inválida, tente novamente.") # Informa sobre a opção inválida
+    print("Opção inválida, tente novamente.")
